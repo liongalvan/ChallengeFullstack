@@ -1,13 +1,14 @@
 import json
 from json import dumps
 import requests
+from decouple import config
 
 
-API_KEY = ('OWXFSUJiu4DQ8C7uzvLfkBEuYJGBzXikXFoVgAOZ3Y9ocRTef5FRM57OMi7QOAuH')
+Api_Key = (config('API_KEY'))
+url = (config('URL_API_PROVIDER'))
 
-
-respuesta = requests.get('https://banking.sandbox.prometeoapi.com/provider/',  headers={
-    'X-API-Key': 'OWXFSUJiu4DQ8C7uzvLfkBEuYJGBzXikXFoVgAOZ3Y9ocRTef5FRM57OMi7QOAuH',
+respuesta = requests.get(url,  headers={
+    'X-API-Key': Api_Key,
 }, )
 
 
@@ -17,5 +18,5 @@ providers = json_response["providers"]
 
 for elem in providers:
     for k, v in elem.items():
-        if (k == "country" and v == "AR"):
+        if (k == "code" and v == "test"):
             print(elem.get("name"))

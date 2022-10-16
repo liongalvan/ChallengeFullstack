@@ -1,16 +1,38 @@
 from prometeo import Client
 from json import dumps
 import requests
+from decouple import config
+import json
 
 r = requests.get('https://www.python.org')
 
-API_KEY = ('OWXFSUJiu4DQ8C7uzvLfkBEuYJGBzXikXFoVgAOZ3Y9ocRTef5FRM57OMi7QOAuH')
+Api_Key = (config('API_KEY'))
+url = (config('URL_API_LOGIN'))
 
-respuesta = requests.post('https://banking.sandbox.prometeoapi.com/login/', data={
-    'provider': 'Banco Nación',
+client = Client(Api_Key, environment="sandbox")
+
+credentials = {
+    'provider': 'test',
     'username': '12345',
     'password': 'gfdsa',
-}, headers={
-    'X-API-Key': 'OWXFSUJiu4DQ8C7uzvLfkBEuYJGBzXikXFoVgAOZ3Y9ocRTef5FRM57OMi7QOAuH'
+}
+
+response = requests.post(url, data=credentials, headers={
+    'X-API-Key': Api_Key
 })
-print(respuesta.json())
+
+session = client.banking.login(**credentials)
+
+try:
+    # Datos del usuario
+    responseClient = session._client.call_api("GET", "/info/", params={
+        "key": session.get_session_key(),
+    })
+    # Datos de cuenta
+    response = session._client.call_api("GET", "/account/", params={
+        "key": session.get_session_key(),
+    })
+    print(dumps(responseClient))
+    print(dumps(response, indent=4))
+finally:
+    session.logout()
