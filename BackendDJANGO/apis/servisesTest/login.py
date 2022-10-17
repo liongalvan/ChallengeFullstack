@@ -4,6 +4,7 @@ import requests
 from decouple import config
 import json
 
+
 r = requests.get('https://www.python.org')
 
 Api_Key = (config('API_KEY'))
@@ -22,6 +23,7 @@ response = requests.post(url, data=credentials, headers={
 })
 
 session = client.banking.login(**credentials)
+print(session._client)
 
 try:
     # Datos del usuario
@@ -34,5 +36,6 @@ try:
     })
     print(dumps(responseClient))
     print(dumps(response, indent=4))
+
 finally:
     session.logout()

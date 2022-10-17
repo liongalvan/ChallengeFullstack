@@ -1,0 +1,5 @@
+<h1>Signin</h1>
+<form method="POST">
+  {{error}} {% csrf_token %} {{form.as_p}}
+  <button>Ingresar</button>
+</form>
