@@ -18,5 +18,5 @@ providers = json_response["providers"]
 
 for elem in providers:
     for k, v in elem.items():
-        if (k == "code" and v == "test"):
+        if (k == "code"):
             print(elem.get("name"))

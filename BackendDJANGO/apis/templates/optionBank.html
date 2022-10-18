@@ -17,30 +17,44 @@
       crossorigin="anonymous"
     />
   </head>
-  <body class="text-center">
-    <div class="card d-inline-block" >
-    <form  class="card d-flex justify-content-center text-center">
-      <div class="card-body">
-        <h4 class="card-header">Ingresar</h4>
-        
-      {{error}} {% csrf_token %} {{form.as_p}} 
-      <button type="button"  class="btn btn-primary btn-block mb-4">Ingresar</button>
-      </div>
-    </div> 
-      
 
-    </form>
-    <div>
+  <body class="text-center">
+    <div class="card d-inline-block">
+      <div class="card-header">Prometeo</div>
+      <div class="card-body">
+        <h5 class="card-title">Bienvenido</h5>
+        <p class="card-text">
+          Para iniciar es necesario que nos indiques tu banco<br />
+          por el momento solo esta permitido el banco "Test Provider"
+        </p>
+
+        <div class="dropdown">
+          <select
+            method="POST"
+            type="submit"
+            class="form-select bg-primary text-white"
+            aria-label="Default select example"
+          >
+            <option method="POST" selected>Bancos</option>
+            {% for banco in bancos%}
+            <option value="{{banco}}" method="POST">{{banco}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JavaScript Libraries -->
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
       integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
       crossorigin="anonymous"
     ></script>
+
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
       integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz"
       crossorigin="anonymous"
     ></script>
-
   </body>
 </html>

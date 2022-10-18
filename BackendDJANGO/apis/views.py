@@ -5,12 +5,31 @@ from prometeo import Client
 from json import dumps
 import requests
 from decouple import config
-
+from django.views.generic import ListView
+import json
+from django.http import HttpResponse
+from django.template import Template, Context
 
 Api_Key = (config('API_KEY'))
-url = (config('URL_API_LOGIN'))
+url_login = (config('URL_API_LOGIN'))
+url_providers = (config('URL_API_PROVIDER'))
 
 client = Client(Api_Key, environment="sandbox")
+
+
+def bank(request):
+
+    nombre = []
+    respuesta = requests.get(url_providers,  headers={
+        'X-API-Key': Api_Key})
+
+    respuesta = respuesta.text
+    json_response = json.loads(respuesta)
+    providersB = json_response["providers"]
+    for elem in providersB:
+        nombre.append(elem.get("name"))
+    titulo = "Elige tu banco"
+    return render(request, 'optionBank.html', {"titulo": titulo, "bancos": nombre})
 
 
 def signin(request):
@@ -24,13 +43,13 @@ def signin(request):
             'username': request.POST['username'],
             'password': request.POST['password'],
         }
-        response = requests.post(url, data=credentials, headers={
+        response = requests.post(url_login, data=credentials, headers={
             'X-API-Key': Api_Key
         })
-        session = client.banking.login(**credentials)
-
-        if session is None:
-            return render(request, 'signin.html',)
+        try:
+            session = client.banking.login(**credentials)
+        except KeyError:
+            return render(request, 'signin.html',  {'error': "Usuario y/o contraseña incorrecta", 'form': AuthenticationForm})
         else:
             try:
                 # Datos del usuario
@@ -43,10 +62,9 @@ def signin(request):
                 })
                 return render(request, 'userData.html', {'data': responseClient, 'cuentas': response})
 
-            except ValueError:
-                return render(request, 'signin.html',)
+            except KeyError:
+                return render(request, 'signin.html', {'form': AuthenticationForm})
 
 
 def data(request):
-
-    return render(request, 'userData.html', responseClient)
+    return render(request, 'userData.html')

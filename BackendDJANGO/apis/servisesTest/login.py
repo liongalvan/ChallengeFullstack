@@ -14,8 +14,8 @@ client = Client(Api_Key, environment="sandbox")
 
 credentials = {
     'provider': 'test',
-    'username': '12345',
-    'password': 'gfdsa',
+    'username': 'dddd',
+    'password': 'gfdddddsa',
 }
 
 response = requests.post(url, data=credentials, headers={
@@ -23,7 +23,7 @@ response = requests.post(url, data=credentials, headers={
 })
 
 session = client.banking.login(**credentials)
-print(session._client)
+print(type(session))
 
 try:
     # Datos del usuario
