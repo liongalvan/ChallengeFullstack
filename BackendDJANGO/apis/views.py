@@ -18,7 +18,6 @@ client = Client(Api_Key, environment="sandbox")
 
 
 def bank(request):
-
     nombre = []
     respuesta = requests.get(url_providers,  headers={
         'X-API-Key': Api_Key})
@@ -28,8 +27,8 @@ def bank(request):
     providersB = json_response["providers"]
     for elem in providersB:
         nombre.append(elem.get("name"))
-    titulo = "Elige tu banco"
-    return render(request, 'optionBank.html', {"titulo": titulo, "bancos": nombre})
+
+    return render(request, 'optionBank.html', {"bancos": nombre})
 
 
 def signin(request):
@@ -46,24 +45,23 @@ def signin(request):
         response = requests.post(url_login, data=credentials, headers={
             'X-API-Key': Api_Key
         })
-        try:
-            session = client.banking.login(**credentials)
-        except KeyError:
-            return render(request, 'signin.html',  {'error': "Usuario y/o contraseña incorrecta", 'form': AuthenticationForm})
-        else:
-            try:
-                # Datos del usuario
-                responseClient = session._client.call_api("GET", "/info/", params={
-                    "key": session.get_session_key(),
-                })
-                # Datos de cuenta
-                response = session._client.call_api("GET", "/account/", params={
-                    "key": session.get_session_key(),
-                })
-                return render(request, 'userData.html', {'data': responseClient, 'cuentas': response})
 
-            except KeyError:
-                return render(request, 'signin.html', {'form': AuthenticationForm})
+        try:
+            # Login del usuario
+            session = client.banking.login(**credentials)
+
+            # Datos del usuario
+            responseClient = session._client.call_api("GET", "/info/", params={
+                "key": session.get_session_key(),
+            })
+            # Datos de cuenta
+            response = session._client.call_api("GET", "/account/", params={
+                "key": session.get_session_key(),
+            })
+            return render(request, 'userData.html', {'data': responseClient, 'cuentas': response})
+
+        except KeyError:
+            return render(request, 'signin.html', {'error': "Usuario o contraseña incorrecta", 'form': AuthenticationForm})
 
 
 def data(request):

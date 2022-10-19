@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Title</title>
+    <title>Prometeo</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -30,16 +30,16 @@
 
         <div class="dropdown">
           <select
-            method="POST"
             type="submit"
             class="form-select bg-primary text-white"
             aria-label="Default select example"
           >
-            <option method="POST" selected>Bancos</option>
+            <option selected>Bancos</option>
             {% for banco in bancos%}
-            <option value="{{banco}}" method="POST">{{banco}}</option>
+            <option value="{{banco}}">{{banco}}</option>
             {% endfor %}
           </select>
+          <br />
         </div>
       </div>
     </div>
